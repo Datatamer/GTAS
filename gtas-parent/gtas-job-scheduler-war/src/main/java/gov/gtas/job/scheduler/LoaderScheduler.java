@@ -101,7 +101,7 @@ public class LoaderScheduler {
 	private Boolean tamrEnabled;
 
 	private void processSingleFile(File f, LoaderStatistics stats, String[] primeFlightKey) {
-		logger.info("Processing Called")
+		logger.info("Processing Called");
 		logger.debug(String.format("Processing %s", f.getAbsolutePath()));
 		ProcessedMessages processedMessages = loader.processMessage(f, primeFlightKey);
 		int[] result = processedMessages.getProcessed();
