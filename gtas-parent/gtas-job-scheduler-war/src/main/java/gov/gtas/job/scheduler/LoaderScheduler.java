@@ -135,7 +135,7 @@ public class LoaderScheduler {
 		try {
 			saveProcessedFile(f);
 		} catch (Exception ex) {
-			logger.error("Unable to process file!")
+			logger.error("Unable to process file!");
 		}
 	}
 
