@@ -17,8 +17,6 @@ import org.springframework.stereotype.Component;
 import gov.gtas.parsers.tamr.jms.TamrQueueConfig;
 
 @Component
-@Service
-@ConditionalOnProperty(prefix = "tamr", name = "enabled")
 public class TamrMessageSender {
 
 	private final Logger logger = LoggerFactory.getLogger(TamrMessageSender.class);
