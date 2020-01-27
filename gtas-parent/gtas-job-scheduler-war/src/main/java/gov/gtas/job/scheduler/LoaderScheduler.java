@@ -108,7 +108,7 @@ public class LoaderScheduler {
 		List<MessageStatus> messageStatusList = processedMessages.getMessageStatusList();
 		messageStatusRepository.saveAll(messageStatusList);
 
-		logger.info("GTAS Processing Complete");
+		logger.info("GTAS Processing Completed");
 
 		if (true) { //tamrEnabled replace with this after dev
 			logger.info("Tamr Enabled");
