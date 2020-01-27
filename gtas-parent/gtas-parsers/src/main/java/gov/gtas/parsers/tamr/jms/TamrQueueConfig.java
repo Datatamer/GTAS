@@ -11,9 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
+import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.jms.config.JmsListenerContainerFactory;
 
 @Configuration
@@ -35,6 +37,24 @@ public class TamrQueueConfig {
         factory.setSessionTransacted(true);
         factory.setConcurrency("5");
         return factory;
+    }
+
+    @Bean
+    public JmsSenderConnectionFactory senderConnectionFactory() {
+        ActiveMQConnectionFactory aMQConnection = new ActiveMQConnectionFactory();
+        aMQConnection.setBrokerURL(activeMQBrokerUrl);
+
+        return aMQConnection;
+    }
+
+    @Bean
+    public CachingConnectionFactory cachingConnectionFactory() {
+        return new CachingConnectionFactory(senderConnectionFactory());
+    }
+
+    @Bean
+    public JmsTemplate jmsTemplate() {
+        return new JmsTemplate(cachingConnectionFactory());
     }
 
 }
