@@ -131,8 +131,8 @@ public class LoaderScheduler {
 		logger.debug("MESSAGE RECEIVED FROM QUEUE: " + messageWorkingDir + File.separator + fileName);
 
 		File f = new File(messageWorkingDir + File.separator + fileName);
-		processSingleFile(f, stats, primeFlightKey);
 		try {
+			processSingleFile(f, stats, primeFlightKey);
 			saveProcessedFile(f);
 		} catch (Exception ex) {
 			logger.error("Unable to process file!");
