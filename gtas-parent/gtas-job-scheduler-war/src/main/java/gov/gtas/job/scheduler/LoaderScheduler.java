@@ -113,6 +113,7 @@ public class LoaderScheduler {
 		if (true) { //tamrEnabled replace with this after dev
 			logger.info("Tamr Enabled");
 			List<TamrPassengerSendObject> objectsToSend = processedMessages.getTamrPassengerSendObjectList();
+			logger.info(String.valueOf(objectsToSend.length));
 			for (TamrPassengerSendObject tpso : objectsToSend) {
 				logger.info("Messaging Sending to Tamr");
 				logger.info(tpso.toString());
