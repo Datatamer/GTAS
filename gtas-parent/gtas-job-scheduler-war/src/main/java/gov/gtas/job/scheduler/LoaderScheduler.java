@@ -110,7 +110,7 @@ public class LoaderScheduler {
 
 		logger.info("GTAS Processing Complete");
 
-		if (tamrEnabled) {
+		if (true) { //tamrEnabled replace with this after dev
 			logger.info("Tamr Enabled");
 			List<TamrPassengerSendObject> objectsToSend = processedMessages.getTamrPassengerSendObjectList();
 			for (TamrPassengerSendObject tpso : objectsToSend) {
