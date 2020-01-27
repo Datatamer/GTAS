@@ -80,7 +80,7 @@ public class LoaderScheduler {
 	private MessageStatusRepository messageStatusRepository;
 
 	@Autowired
-	private TamrMessageSender sender;
+	private TamrMessageSender tamrMessageSender;
 
 	@Value("${message.dir.processed}")
 	private String messageProcessedDir;
@@ -112,7 +112,7 @@ public class LoaderScheduler {
 			List<TamrPassengerSendObject> objectsToSend = processedMessages.getTamrPassengerSendObjectList();
 			for (TamrPassengerSendObject tpso : objectsToSend) {
 				logger.info(tpso.toString());
-				sender.sendMessageToTamr("Outbound", tpso.toString()); // TODO add code here
+				tamrMessageSender.sendMessageToTamr("Outbound", tpso.toString()); // TODO add code here
 			}
 		}
 
