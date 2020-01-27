@@ -17,10 +17,12 @@ import gov.gtas.json.AuditActionData;
 import gov.gtas.json.AuditActionTarget;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.parsers.tamr.model.TamrPassengerSendObject;
+import gov.gtas.parsers.tamr.jms.TamrMessageSender;
 import gov.gtas.repository.MessageStatusRepository;
 import gov.gtas.services.*;
 import gov.gtas.services.matcher.MatchingService;
 import gov.gtas.svc.TargetingService;
+
 
 import java.io.File;
 import java.util.Date;
@@ -77,6 +79,9 @@ public class LoaderScheduler {
 	@Autowired
 	private MessageStatusRepository messageStatusRepository;
 
+	@Autowired
+	private TamrMessageSender sender;
+
 	@Value("${message.dir.processed}")
 	private String messageProcessedDir;
 
@@ -96,6 +101,7 @@ public class LoaderScheduler {
 	private Boolean tamrEnabled;
 
 	private void processSingleFile(File f, LoaderStatistics stats, String[] primeFlightKey) {
+		logger.info("Processing Called")
 		logger.debug(String.format("Processing %s", f.getAbsolutePath()));
 		ProcessedMessages processedMessages = loader.processMessage(f, primeFlightKey);
 		int[] result = processedMessages.getProcessed();
@@ -103,11 +109,10 @@ public class LoaderScheduler {
 		messageStatusRepository.saveAll(messageStatusList);
 
 		if (tamrEnabled) {
-			// post message on queue here. Dummy Code below:
-			// todo : write send logic
 			List<TamrPassengerSendObject> objectsToSend = processedMessages.getTamrPassengerSendObjectList();
 			for (TamrPassengerSendObject tpso : objectsToSend) {
 				logger.info(tpso.toString());
+				sender.sendMessageToTamr("Outbound", tpso.toString()); // TODO add code here
 			}
 		}
 
