@@ -40,7 +40,7 @@ public class TamrQueueConfig {
     }
 
     @Bean
-    public JmsSenderConnectionFactory senderConnectionFactory() {
+    public ActiveMQConnectionFactory senderConnectionFactory() {
         ActiveMQConnectionFactory aMQConnection = new ActiveMQConnectionFactory();
         aMQConnection.setBrokerURL(activeMQBrokerUrl);
 

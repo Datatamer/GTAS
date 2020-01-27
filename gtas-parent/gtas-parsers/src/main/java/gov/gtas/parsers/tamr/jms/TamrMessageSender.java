@@ -27,7 +27,6 @@ public class TamrMessageSender {
 	@Autowired
 	TamrQueueConfig queueConfig;
 
-
 	public ConnectionFactory connectionFactory() {
 		// Add tamr connection details here.
 		return new ActiveMQConnectionFactory("");
