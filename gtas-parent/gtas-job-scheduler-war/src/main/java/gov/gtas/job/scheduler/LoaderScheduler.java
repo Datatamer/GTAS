@@ -100,7 +100,7 @@ public class LoaderScheduler {
 	@Value("${tamr.enabled}")
 	private Boolean tamrEnabled;
 
-	private void processSingleFile(File f, LoaderStatistics stats, String[] primeFlightKey) {
+	private void processSingleFile(File f, LoaderStatistics stats, String[] primeFlightKey) throws Exception {
 		logger.info("Processing Called");
 		logger.debug(String.format("Processing %s", f.getAbsolutePath()));
 		ProcessedMessages processedMessages = loader.processMessage(f, primeFlightKey);
