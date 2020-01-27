@@ -13,13 +13,20 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Component;
 
+import gov.gtas.parsers.tamr.jms.TamrQueueConfig;
+
 @Component
+@ConditionalOnProperty(prefix = "tamr", name = "enabled")
 public class TamrMessageSender {
 
 	private final Logger logger = LoggerFactory.getLogger(TamrMessageSender.class);
 
 	@Autowired
 	JmsTemplate jmsTemplateFile;
+
+	@Autowired
+	TamrQueueConfig queueConfig;
+
 
 	public ConnectionFactory connectionFactory() {
 		// Add tamr connection details here.
@@ -30,7 +37,7 @@ public class TamrMessageSender {
 		logger.info("############### Attempting to craft tamr message .... ################");
 		logger.info("############### Sending to Queue: " + queue + " .... ################");
 		jmsTemplateFile.setDefaultDestinationName(queue);
-		jmsTemplateFile.setConnectionFactory(connectionFactory());
+		jmsTemplateFile.setConnectionFactory(queueConfig.cachingConnectionFactory());
 
 		jmsTemplateFile.send(new MessageCreator() {
 			@Override
