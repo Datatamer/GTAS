@@ -24,7 +24,7 @@ import javax.annotation.Resource;
  */
 @Configuration
 @EnableScheduling
-@ComponentScan("gov.gtas")
+@ComponentScan("gov.gtas.job.scheduler")
 @PropertySource("classpath:default.application.properties")
 @PropertySource(value = "file:${catalina.home}/conf/application.properties", ignoreResourceNotFound = true)
 public class JobSchedulerConfig implements SchedulingConfigurer {
