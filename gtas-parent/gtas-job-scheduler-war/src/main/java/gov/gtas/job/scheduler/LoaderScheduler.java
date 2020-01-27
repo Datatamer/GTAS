@@ -132,7 +132,11 @@ public class LoaderScheduler {
 
 		File f = new File(messageWorkingDir + File.separator + fileName);
 		processSingleFile(f, stats, primeFlightKey);
-		saveProcessedFile(f);
+		try {
+			saveProcessedFile(f);
+		} catch (Exception ex) {
+			logger.error("Unable to process file!")
+		}
 	}
 
 	// Moves the file from the working dir to the processed, returns true on
