@@ -105,7 +105,6 @@ public class Loader {
 		List<TamrPassenger> tamrPassengers = new ArrayList<>();
 		for (String rawMessage : rawMessages) {
 			msgDto.setRawMsg(rawMessage);
-			logger.into
 			MessageDto parsedMessageDto = svc.parse(msgDto);
 			if (parsedMessageDto.getMessageStatus().isSuccess()) {
 				MessageInformation messageInformation = svc.load(parsedMessageDto);
