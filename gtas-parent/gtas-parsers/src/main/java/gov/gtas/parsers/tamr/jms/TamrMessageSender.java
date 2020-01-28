@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Component;
-
+import gov.gtas.model.Flight;
 import gov.gtas.parsers.tamr.model.TamrPassenger;
 import gov.gtas.parsers.tamr.jms.TamrQueueConfig;
 import gov.gtas.parsers.tamr.TamrAdapterImpl;
@@ -45,6 +45,7 @@ public class TamrMessageSender {
 		jmsTemplateFile.setDefaultDestinationName(queue);
 		jmsTemplateFile.setConnectionFactory(queueConfig.cachingConnectionFactory());
 
+		Flight flight = new Flight();
 		List<TamrPassenger> tamrPassengers = tamrAdapter.convertPassengers(flight, passengers);
 		TamrQuery tamrQuery = new TamrQuery(tamrPassengers);
 		ObjectMapper mapper = new ObjectMapper();
