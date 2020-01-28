@@ -101,7 +101,6 @@ public class LoaderScheduler {
 	private Boolean tamrEnabled;
 
 	private void processSingleFile(File f, LoaderStatistics stats, String[] primeFlightKey) throws Exception {
-		logger.info("Processing Called");
 		logger.debug(String.format("Processing %s", f.getAbsolutePath()));
 		ProcessedMessages processedMessages = loader.processMessage(f, primeFlightKey);
 		int[] result = processedMessages.getProcessed();
@@ -112,13 +111,15 @@ public class LoaderScheduler {
 
 		if (tamrEnabled) { // replace with this after dev
 			logger.info("Tamr Enabled");
-			List<TamrPassenger> objectsToSend = processedMessages.getTamrPassengers();
-			logger.info(String.valueOf(objectsToSend.size()));
-			for (TamrPassenger tpso : objectsToSend) {
-				logger.info("Messaging Sending to Tamr");
-				logger.info(tpso.toString());
-				tamrMessageSender.sendMessageToTamr("Outbound", tpso.toString()); // TODO add code here
-			}
+			List<TamrPassenger> passToSend = processedMessages.getTamrPassengers();
+			logger.info(String.valueOf(passToSend.size()));
+			tamrMessageSender.sendMessageToTamr("Outbound", passToSend); // TODO add code here
+
+//			for (TamrPassenger tpso : objectsToSend) {
+//				logger.info("Messaging Sending to Tamr");
+//				logger.info(tpso.toString());
+//				tamrMessageSender.sendMessageToTamr("Outbound", tpso.toString()); // TODO add code here
+//			}
 		}
 
 		if (result != null) {

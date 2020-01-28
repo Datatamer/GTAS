@@ -1,5 +1,7 @@
 package gov.gtas.parsers.tamr.jms;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -13,14 +15,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Component;
-
+import gov.gtas.parsers.tamr.model.TamrPassenger;
 import gov.gtas.parsers.tamr.jms.TamrQueueConfig;
+import gov.gtas.parsers.tamr.TamrAdapterImpl;
+import gov.gtas.parsers.tamr.model.TamrQuery;
 
 @Component
-//@ConditionalOnProperty(prefix = "tamr", name = "enabled")
+@ConditionalOnProperty(prefix = "tamr", name = "enabled")
 public class TamrMessageSender {
 
 	private final Logger logger = LoggerFactory.getLogger(TamrMessageSender.class);
+	private TamrAdapterImpl tamrAdapter = new TamrAdapterImpl();
 
 	@Autowired
 	JmsTemplate jmsTemplateFile;
@@ -33,20 +38,29 @@ public class TamrMessageSender {
 		return new ActiveMQConnectionFactory("");
 	}
 
-	public boolean sendMessageToTamr(String queue, String messageContent) throws Exception {
+	public boolean sendMessageToTamr(String queue, List<TamrPassenger> passengers) throws Exception {
 		logger.info("############### Attempting to craft tamr message .... ################");
-		logger.info("############### Sending to Queue: " + queue + " .... ################");
+
 		jmsTemplateFile.setDefaultDestinationName(queue);
 		jmsTemplateFile.setConnectionFactory(queueConfig.cachingConnectionFactory());
 
+		List<TamrPassenger> tamrPassengers = tamrAdapter.convertPassengers(flight, passengers);
+		TamrQuery tamrQuery = new TamrQuery(tamrPassengers);
+		ObjectMapper mapper = new ObjectMapper();
+		String tamrQueryJson = mapper.writer()
+				.writeValueAsString(tamrQuery);
+
+		logger.info("Query:")
+		logger.info(tamrQueryJson)
+
 		jmsTemplateFile.send(new MessageCreator() {
-			@Override
 			public Message createMessage(Session session) throws JMSException {
-				Message message = session.createTextMessage("{\"passengers\":" + messageContent + "}");
+				Message message = session.createTextMessage(tamrQueryJson);
 				message.setJMSType("QUERY");
 				return message;
 			}
 		});
+
 		return true;
 	}
 }
