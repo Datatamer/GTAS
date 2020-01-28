@@ -45,9 +45,7 @@ public class TamrMessageSender {
 		jmsTemplateFile.setDefaultDestinationName(queue);
 		jmsTemplateFile.setConnectionFactory(queueConfig.cachingConnectionFactory());
 
-		Flight flight = new Flight();
-		List<TamrPassenger> tamrPassengers = tamrAdapter.convertPassengers(flight, passengers);
-		TamrQuery tamrQuery = new TamrQuery(tamrPassengers);
+		TamrQuery tamrQuery = new TamrQuery(passengers);
 		ObjectMapper mapper = new ObjectMapper();
 		String tamrQueryJson = mapper.writer().writeValueAsString(tamrQuery);
 
