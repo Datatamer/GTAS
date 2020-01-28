@@ -40,18 +40,16 @@ public class TamrMessageSender {
 
 	public boolean sendMessageToTamr(String queue, List<TamrPassenger> passengers) throws Exception {
 		logger.info("############### Attempting to craft tamr message .... ################");
-
 		jmsTemplateFile.setDefaultDestinationName(queue);
 		jmsTemplateFile.setConnectionFactory(queueConfig.cachingConnectionFactory());
 
 		List<TamrPassenger> tamrPassengers = tamrAdapter.convertPassengers(flight, passengers);
 		TamrQuery tamrQuery = new TamrQuery(tamrPassengers);
 		ObjectMapper mapper = new ObjectMapper();
-		String tamrQueryJson = mapper.writer()
-				.writeValueAsString(tamrQuery);
+		String tamrQueryJson = mapper.writer().writeValueAsString(tamrQuery);
 
-		logger.info("Query:")
-		logger.info(tamrQueryJson)
+		logger.info("Query:");
+		logger.info(tamrQueryJson);
 
 		jmsTemplateFile.send(new MessageCreator() {
 			public Message createMessage(Session session) throws JMSException {
